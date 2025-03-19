@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Purchase Overview</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/admin.css') }}"
+    />
+  </head>
+  <body>
+    <div id="purchase-overview-container">
+      <h1>Purchase Overview by Genre</h1>
+      <div id="irz7b" class="gjs-grid-row">
+        <form action="/" method="GET">
+          <button type="submit" class="gjs-button">Back to Main Page</button>
+        </form>
+      </div>
+      <form
+        id="filter-form"
+        action="{{ url_for('purchase_overview') }}"
+        method="POST"
+      >
+        <div>
+          <label for="artist-name">Artist:</label>
+          <input
+            type="text"
+            id="artist-name"
+            name="artist_name"
+            placeholder="Künstlername"
+          />
+        </div>
+        <div>
+          <label for="genre">Genre:</label>
+
+          <select id="genre" name="genre">
+            <option value="">All</option>
+            <option value="Blues">Blues</option>
+            <option value="Children's">Children's</option>
+            <option value="Classical">Classical</option>
+            <option value="Electronic">Electronic</option>
+            <option value="Folk, World, & Country">
+              Folk, World, & Country
+            </option>
+            <option value="Funk / Soul">Funk / Soul</option>
+            <option value="Hip Hop">Hip Hop</option>
+            <option value="Jazz">Jazz</option>
+            <option value="Pop">Pop</option>
+            <option value="Rock">Rock</option>
+            <option value="Stage & Screen">Stage & Screen</option>
+          </select>
+        </div>
+        <div>
+          <label for="start-date">From:</label>
+          <input type="date" id="start-date" name="start_date" />
+        </div>
+        <div>
+          <label for="end-date">Till:</label>
+          <input type="date" id="end-date" name="end_date" />
+        </div>
+        <button type="submit">Use Filter</button>
+      </form>
+
+      <div id="report-results">
+        {% if sales_data %}
+        <h2>Summary by Genre</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Genre</th>
+              <th>Total Vinyls</th>
+              <th>Total Sales</th>
+              <th>Total Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in sales_data %}
+            <tr>
+              <td>{{ row.Genre }}</td>
+              <td>{{ row.vinyl_count }}</td>
+              <td>{{ row.total_purchase }}</td>
+              <td>{{ row.total_revenue }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <h2>Detailed Vinyl Sales</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Vinyl Name</th>
+              <th>Artist</th>
+              <th>Genre</th>
+              <th>Sales</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for vinyl in vinyl_sales %}
+            <tr>
+              <td>{{ vinyl.Vinyl_Name }}</td>
+              <td>{{ vinyl.Artist_Name }}</td>
+              <td>{{ vinyl.Genre }}</td>
+              <td>{{ vinyl.Total_Sales }}</td>
+              <td>{{ vinyl.Total_Revenue }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>No Data found. DumBass Records is broke.</p>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

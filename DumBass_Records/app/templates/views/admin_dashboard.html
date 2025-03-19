@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Admin Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/header.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/admin.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  </head>
+
+  <body id="iau9">
+    <div id="i6po" class="gjs-grid-row">
+      <div id="itjq" class="gjs-grid-column">
+        <div id="iyd2" class="gjs-grid-row">
+          <div id="iqjl" class="gjs-grid-column">
+            <div id="ik9gix" class="gjs-image-box">
+              <div id="icive2">DumBassRecords<br /></div>
+            </div>
+          </div>
+          <div class="search-container">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search..."
+              onkeyup="filterVinyls()"
+            />
+            <div class="search-results" id="search-results"></div>
+          </div>
+          <div id="iffs" class="gjs-grid-column">
+            <div id="it00l" class="gjs-grid-row">
+              <div id="irtfd" class="gjs-grid-column">
+                <a id="icfyb" href="javascript:login('show');" class="gjs-link"
+                  >Login</a
+                >
+              </div>
+            </div>
+          </div>
+          <div id="id8x" class="gjs-grid-column">
+            <form id="migrateToNoSql" action="/migrate_to_no_sql" method="POST">
+              <button id="i1mew" class="gjs-button" type="submit">
+                Migrate To No Sql
+              </button>
+            </form>
+          </div>
+          <div id="iffs" class="gjs-grid-column">
+            <div id="it00l" class="gjs-grid-row"></div>
+          </div>
+          <div id="id7x" class="gjs-grid-column">
+            <form
+              id="eraseAndFillForm"
+              action="/erase_and_fill_db"
+              method="POST"
+            >
+              <button id="i1mew" class="gjs-button" type="submit">
+                Erase &amp; Fill DataBass
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="admin-container">
+      <h1>Welcome, {{ session['user_name'] }}!</h1>
+      <h2>Admin Dashboard</h2>
+      <div id="dashboard-buttons">
+        <form action="{{ url_for('purchase_overview') }}" method="GET">
+          <button type="submit" class="gjs-button">Purchase Overview</button>
+        </form>
+        <form action="{{ url_for('insert_vinyl_page') }}" method="GET">
+          <button type="submit" class="gjs-button">Insert new Vinyl</button>
+        </form>
+      </div>
+      <div id="irz7b" class="gjs-grid-row">
+        <form action="/" method="GET">
+          <button type="submit" class="gjs-button">Back to Main Page</button>
+        </form>
+      </div>
+               
+        <h3>Search For Vinyl</h3>
+      <div id="filters">
+        <form id="filter-form" method="GET" action="{{ url_for('admin_dashboard') }}">
+          <label for="id-filter">Vinyl ID:</label>
+          <input type="number" id="id" name="id" placeholder="Vinyl ID" />
+          
+          <label for="genre-filter">Genre:</label>
+          <select id="genre-filter" name="genre">
+            <option value="">All</option>
+            {% for genre in genres %}
+            <option value="{{ genre }}">{{ genre }}</option>
+            {% endfor %}
+          </select>
+
+          <label for="artist-filter">Artist:</label>
+          <input type="text" id="artist" name="artist" placeholder="Artist Name" />
+
+          <label for="price-range">Price Range:</label>
+          <input type="number" id="min-price" name="min_price" placeholder="Min Price" />
+          <input type="number" id="max-price" name="max_price" placeholder="Max Price" />
+
+        <button type="submit">Apply Filters</button>
+        </form>
+      </div>
+      <div id="vinyls-table-container">
+        <h3>Available Vinyls</h3>
+        <table id="vinyls-table">
+          <thead>
+            <tr>
+              <th>Vinyl ID</th>
+              <th>Cover Image</th>
+              <th>Vinyl Name</th>
+              <th>Price</th>
+              <th>Artist Name</th>
+              <th>Release Date</th>
+              <th>Genre</th>
+              <th>Country</th>
+            </tr>
+          </thead>
+          <tbody id="vinyls-table-body">
+            {% for vinyl in vinyls %}
+            <tr>
+              <td>{{ vinyl.vinyl_id }}</td>
+              <td>
+                {% if vinyl.cover_image %}
+                <img src="{{ vinyl.cover_image }}" alt="Cover" style="max-width: 100px" />
+                {% else %} No Image {% endif %}
+              </td>
+              <td>{{ vinyl.vinyl_title }}</td>
+              <td>${{ vinyl.price }}</td>
+              <td>{{ vinyl.artist_name }}</td>
+              <td>{{ vinyl.release_date }}</td>
+              <td>{{ vinyl.genre }}</td>
+              <td>{{ vinyl.nationality }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+  </body>
+</html>
+

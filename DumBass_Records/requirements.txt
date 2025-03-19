@@ -1,0 +1,6 @@
+Flask
+Faker
+python3-discogs-client
+mariadb
+pymysql
+pymongo

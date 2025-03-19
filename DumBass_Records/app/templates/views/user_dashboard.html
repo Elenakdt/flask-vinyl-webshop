@@ -1,0 +1,426 @@
+<!doctype html>
+<html>
+  <head>
+    <title>User Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/header.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/user_dashboard.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  </head>
+  <body>
+    <div id="popupbox" style="display: none">
+      <form name="login" action="/login" method="post">
+        <center>Email:</center>
+        <center>
+          <input name="email" , type="email" size="14" />
+        </center>
+        <center>Password:</center>
+        <center>
+          <input name="password" type="password" size="14" />
+        </center>
+        <center>
+          <input type="submit" name="submit" value="Login" />
+        </center>
+      </form>
+      <br />
+      <center><a href="javascript:login('hide');">Close</a></center>
+    </div>
+    <div id="i6po" class="gjs-grid-row">
+      <div id="itjq" class="gjs-grid-column">
+        <div id="iyd2" class="gjs-grid-row">
+          <div id="iqjl" class="gjs-grid-column">
+            <div id="ik9gix" class="gjs-image-box">
+              <div id="icive2">DumBassRecords<br /></div>
+            </div>
+          </div>
+          <div class="search-container">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search..."
+              onkeyup="filterVinyls()"
+            />
+            <div class="search-results" id="search-results"></div>
+          </div>
+          <div id="iffs" class="gjs-grid-column">
+            <div id="it00l" class="gjs-grid-row">
+              <div id="irtfd" class="gjs-grid-column">
+                <a id="icfyb" href="javascript:login('show');" class="gjs-link"
+                  >Login</a
+                >
+              </div>
+            </div>
+          </div>
+          <div id="id8x" class="gjs-grid-column">
+            <form id="migrateToNoSql" action="/migrate_to_no_sql" method="POST">
+              <button id="i1mew" class="gjs-button" type="submit">
+                Migrate To No Sql
+              </button>
+            </form>
+          </div>
+          <div id="id7x" class="gjs-grid-column">
+            <form
+              id="eraseAndFillForm"
+              action="/erase_and_fill_db"
+              method="POST"
+            >
+              <button id="i1mew" class="gjs-button" type="submit">
+                Erase &amp; Fill DataBass
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div id="wrapper">
+        <div id="user-container">
+          <div class="user-text">
+            <h1>Welcome, {{ session['user_name'] }}!</h1>
+            <h2>User Dashboard</h2>
+          </div>
+          <div id="irz7b" class="gjs-grid-row">
+            <a id="main-page-btn" href="/" class="gjs-button">Back to Home Page</a>
+          </div>          
+        </div>
+        <div id="orders-container">
+          <h3>Your Orders</h3>
+          {% if orders %} {% for order in orders %}
+          <div class="order-container">
+            <div class="order-summary">
+              <h3>Order ID: {{ order.Order_ID }}</h3>
+              <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+              <p>
+                <strong>Payment Method:</strong> {{ order.payment_method }}
+              </p>
+              <p>
+                <strong>Total Price:</strong> ${{
+                "%.2f"|format(order.total_price) }}
+              </p>
+            </div>
+            <div class="vinyls-section">
+              <h4>Vinyls in this Order:</h4>
+              <ul class="vinyls-list">
+                {% for vinyl in order.vinyls %}
+                <li class="vinyl-item">
+                  {% if vinyl.cover_image %}
+                  <img
+                    src="{{ vinyl.cover_image }}"
+                    alt="{{ vinyl.vinyl_title }} Cover"
+                    class="vinyl-image"
+                  />
+                  {% else %}
+                  <div
+                    class="vinyl-image"
+                    style="
+                      background-color: #ced4da;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      color: #6c757d;
+                      font-size: 0.8em;
+                    "
+                  >
+                    No Image
+                  </div>
+                  {% endif %}
+                  <div class="vinyl-info">
+                    <h4>{{ vinyl.Vinyl_Name }}</h4>
+                    <p><strong>Artist:</strong> {{ vinyl.artist_name }}</p>
+                    <p>
+                      <strong>Release Date:</strong> {{ vinyl.release_date }}
+                    </p>
+                    <p><strong>Genre:</strong> {{ vinyl.genre }}</p>
+                    <p><strong>Country:</strong> {{ vinyl.nationality }}</p>
+                    <p>
+                      <strong>Price:</strong> ${{ "%.2f"|format(vinyl.price) }}
+                    </p>
+                    <p><strong>Quantity:</strong> {{ vinyl.amount }}</p>
+                  </div>
+                  <div class="user-action">
+                    <button
+                      class="gjs-button"
+                      onclick="openModal(this)"
+                      data-vinyl-id="{{ vinyl.vinyl_id }}"
+                      data-product-name="{{ vinyl.vinyl_title }}"
+                      data-cover-image="{{ vinyl.cover_image }}"
+                      data-artist-name="{{ vinyl.artist_name }}"
+                      data-release-date="{{ vinyl.release_date }}"
+                      data-genre="{{ vinyl.genre }}"
+                      data-country="{{ vinyl.nationality }}"
+                      data-price="{{ "%.2f"|format(vinyl.price) }}"
+                      data-quantity="{{ vinyl.amount }}"
+                    >
+                      Review Bought Vinyls
+                    </button>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          {% endfor %} {% else %}
+          <p class="no-orders">You have no orders.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+<div id="review-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-button" onclick="closeModal()">&times;</span>
+    <h3>Review Your Vinyl</h3>
+    
+    <div class="selected-vinyl">
+      <img id="modal-vinyl-image" src="" alt="Vinyl Cover" class="vinyl-image" />
+      <div class="vinyl-info">
+        <h4 id="modal-vinyl-name"></h4>
+        <p><strong>Artist:</strong> <span id="modal-artist-name"></span></p>
+        <p><strong>Release Date:</strong> <span id="modal-release-date"></span></p>
+        <p><strong>Genre:</strong> <span id="modal-genre"></span></p>
+        <p><strong>Country:</strong> <span id="modal-country"></span></p>
+        <p><strong>Price:</strong> $<span id="modal-price"></span></p>
+        <p><strong>Quantity:</strong> <span id="modal-quantity"></span></p>
+      </div>
+    </div>
+    
+    <form id="review-form" onsubmit="submitReview(event)">
+      <div class="form-group">
+        <label for="rating">Rating (out of 5):</label>
+        <input
+          type="number"
+          id="rating"
+          name="rating"
+          min="1"
+          max="5"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="review-text">Your Review:</label>
+        <textarea
+          id="review-text"
+          name="review-text"
+          rows="3"
+          required
+        ></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit Review</button>
+<div id="review-feedback" class="feedback-message"></div>
+    </form>
+  </div>
+</div>
+<script>
+  let selectedVinylId = null;
+
+    async function openModal(button) {
+    console.log('openModal function called');
+
+    const vinylId = button.getAttribute('data-vinyl-id');
+    const productName = button.getAttribute('data-product-name');
+    const coverImage = button.getAttribute('data-cover-image');
+    const artistName = button.getAttribute('data-artist-name');
+    const releaseDate = button.getAttribute('data-release-date');
+    const genre = button.getAttribute('data-genre');
+    const country = button.getAttribute('data-country');
+    const price = button.getAttribute('data-price');
+    const quantity = button.getAttribute('data-quantity');
+
+    selectedVinylId = vinylId;
+
+    document.getElementById('modal-vinyl-image').src = coverImage || 'path/to/default/image.png';
+    document.getElementById('modal-vinyl-image').alt = `${productName} Cover`;
+    document.getElementById('modal-vinyl-name').textContent = productName;
+    document.getElementById('modal-artist-name').textContent = artistName;
+    document.getElementById('modal-release-date').textContent = releaseDate;
+    document.getElementById('modal-genre').textContent = genre;
+    document.getElementById('modal-country').textContent = country;
+    document.getElementById('modal-price').textContent = price;
+    document.getElementById('modal-quantity').textContent = quantity;
+
+    console.log(`Opening modal for Vinyl ID: ${vinylId}`);
+
+    try {
+        const response = await fetch(`/check_review?vinyl_id=${vinylId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(`Review exists: ${data.review_exists}`);
+            if (data.review_exists) {
+                displayExistingReview(data.comment, data.rating, data.review_date);
+            } else {
+                displayReviewForm();
+            }
+        } else {
+            console.error('Failed to check review status.');
+            displayReviewForm();
+        }
+    } catch (error) {
+        console.error('Error checking review status:', error);
+        displayReviewForm();
+    }
+
+    document.getElementById("review-modal").style.display = "block";
+    document.body.classList.add("modal-active");
+    }
+
+function displayExistingReview(comment, rating, reviewDate) {
+    const reviewForm = document.getElementById('review-form');
+    const submitButton = reviewForm.querySelector('button[type="submit"]');
+    const feedback = document.getElementById('review-feedback');
+
+    reviewForm.querySelector('#rating').style.display = 'none';
+    reviewForm.querySelector('#review-text').style.display = 'none';
+    reviewForm.querySelector('label[for="rating"]').style.display = 'none';
+    reviewForm.querySelector('label[for="review-text"]').style.display = 'none';
+
+    feedback.innerHTML = `
+        <h4>Your Review:</h4>
+        <p><strong>Rating:</strong> ${rating}/5</p>
+        <p><strong>Comment:</strong> ${comment}</p>
+        <p><strong>Review Date:</strong> ${reviewDate}</p>
+    `;
+    feedback.classList.remove('error');
+
+    submitButton.textContent = 'Delete Review';
+    submitButton.classList.add('delete-button');
+    submitButton.onclick = function(event) {
+        event.preventDefault();
+        deleteReview();
+    };
+}
+
+  function displayReviewForm() {
+    const reviewForm = document.getElementById('review-form');
+    const submitButton = reviewForm.querySelector('button[type="submit"]');
+    const feedback = document.getElementById('review-feedback');
+
+    reviewForm.querySelector('#rating').style.display = 'block';
+    reviewForm.querySelector('#review-text').style.display = 'block';
+    reviewForm.querySelector('label[for="rating"]').style.display = 'block';
+    reviewForm.querySelector('label[for="review-text"]').style.display = 'block';
+
+    feedback.innerHTML = '';
+    feedback.classList.remove('error');
+
+    submitButton.textContent = 'Submit Review';
+    submitButton.classList.remove('delete-button');
+    submitButton.onclick = null;
+  }
+
+  async function deleteReview() {
+    if (!confirm("Are you sure you want to delete your review?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/delete_review`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ vinyl_id: selectedVinylId })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message || "Review deleted successfully!");
+        closeModal();
+      } else {
+        const error = await response.json();
+        alert(error.message || "An error occurred while deleting your review.");
+      }
+    } catch (error) {
+      console.error("Error deleting review:", error);
+      alert("Failed to delete review. Please try again later.");
+    }
+  }
+
+  async function submitReview(event) {
+    event.preventDefault();
+
+    const ratingInput = document.getElementById("rating");
+    const reviewTextInput = document.getElementById("review-text");
+    const rating = ratingInput.value;
+    const reviewText = reviewTextInput.value;
+
+    if (!selectedVinylId) {
+      alert("Please select a vinyl to review!");
+      return;
+    }
+
+    const reviewData = {
+      vinyl_id: selectedVinylId,
+      rating: rating,
+      review_text: reviewText,
+    };
+
+    console.log(`Submitting review for Vinyl ID: ${selectedVinylId}`);
+
+    try {
+      const response = await fetch("/submit_review", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(reviewData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message || "Review submitted successfully!");
+        document.getElementById("review-form").reset();
+        closeModal();
+      } else {
+        const error = await response.json();
+        alert(
+          error.message ||
+          "An error occurred while submitting your review.",
+        );
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      alert("Failed to submit review. Please try again later.");
+    }
+  }
+
+  function closeModal() {
+    document.getElementById("review-modal").style.display = "none";
+    document.body.classList.remove("modal-active");
+
+    const reviewForm = document.getElementById('review-form');
+    reviewForm.reset();
+    displayReviewForm();
+    selectedVinylId = null;
+
+    console.log('Modal closed');
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("review-modal");
+    if (event.target == modal) {
+      closeModal();
+    }
+  }
+</script>
+  </body>
+</html>

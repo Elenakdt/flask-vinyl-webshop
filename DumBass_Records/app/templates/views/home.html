@@ -1,0 +1,392 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Home</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="index,follow" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/header.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/home.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  </head>
+
+  <body id="iau9">
+    <div id="i6po" class="gjs-grid-row">
+      <div id="itjq" class="gjs-grid-column">
+        <div id="iyd2" class="gjs-grid-row">
+          <div id="iqjl" class="gjs-grid-column">
+            <div id="ik9gix" class="gjs-image-box">
+              <div id="icive2">DumBassRecords<br /></div>
+            </div>
+          </div>
+          <div class="search-container">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search..."
+              onkeyup="filterVinyls()"
+            />
+            <div class="search-results" id="search-results"></div>
+          </div>
+          <div id="iffs" class="gjs-grid-column">
+            <a id="icfyb" href="javascript:login('show');" class="gjs-link"
+              >Login</a
+            >
+          </div>
+          <div id="iffs" class="gjs-grid-column">
+            <a id="icfyb" href="javascript:logout();" class="gjs-link"
+              >Logout</a
+            >
+          </div>
+          <form id="migrateToNoSql" action="/migrate_to_no_sql" method="POST">
+            <button id="i1mew" class="gjs-button" type="submit">
+              Migrate To No Sql
+            </button>
+          </form>
+          <form
+            id="eraseAndFillForm"
+            action="/erase_and_fill_db"
+            method="POST"
+            style="margin-right: 20px"
+          >
+            <button id="i1mew" class="gjs-button" type="submit">
+              Erase &amp; Fill DataBass
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <section id="ivjgs" class="gjs-section">
+      <div id="ik4rf" class="gjs-container">
+        <div id="ifzlb" class="gjs-image-box"></div>
+      </div>
+    </section>
+    <div id="irz7b" class="gjs-grid-row">
+      <a id="iar3s" href="/shop" class="gjs-button">Go To Shop</a>
+    </div>
+    <div id="irz7b" class="gjs-grid-row">
+      <a id="iar3s" href="/best_rated" class="gjs-button"
+        >View best rated Vinyls</a
+      >
+    </div>
+    <div id="irz7b" class="gjs-grid-row">
+      {% if session.get('user_role') == 'admin' %}
+      <a id="dashboard-btn" href="/admin_dashboard" class="gjs-button">Go to Dashboard</a>
+      {% elif session.get('user_role') == 'customer' %}
+      <a id="dashboard-btn" href="/user_dashboard" class="gjs-button">Go to Dashboard</a>
+      {% else %}
+      <p>No Login No Dashboard, clearly.</p>
+      {% endif %}
+    </div>
+    
+
+    <div class="best-selling-container">
+      <h2 class="section-title">This Week’s Best-Selling</h2>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          {% for vinyl in vinyls %}
+          <div class="swiper-slide release-card">
+            <img
+              class="album-cover"
+              src="{{ vinyl.cover_image }}"
+              alt="{{ vinyl.vinyl_title }}"
+            />
+            <div class="release-info">
+              <h3 class="release-title">{{ vinyl.vinyl_title }}</h3>
+              <h4 class="artist-name">{{ vinyl.artist_name }}</h4>
+              <p class="release-year">
+                {{ vinyl.release_date.strftime('%Y') }}
+              </p>
+              <p class="release-genre">{{ vinyl.genre }}</p>
+              <p class="release-price">${{ vinyl.price }}</p>
+            </div>
+            <div class="release-actions">
+              <a href="#" class="want-btn">Want</a>
+              <button
+                class="buy-btn"
+                onclick="buyVinyl('{{ vinyl.vinyl_id }}')"
+              >
+                Buy
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    </div>
+    <div id="popupbox" style="display: none">
+      <form name="login" action="/login" method="post">
+        <center>Email:</center>
+        <center>
+          <input name="email" , type="email" size="14" />
+        </center>
+        <center>Password:</center>
+        <center>
+          <input name="password" type="password" size="14" />
+        </center>
+        <center>
+          <input type="submit" name="submit" value="Login" />
+        </center>
+      </form>
+      <br />
+      <center><a href="javascript:login('hide');">Close</a></center>
+    </div>
+  </body>
+</html>
+
+<script>
+  document
+    .getElementById("migrateToNoSql")
+    .addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      try {
+        const response = await fetch(this.action, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          if (data.success) {
+            alert(data.success);
+          } else if (data.warn) {
+            alert(data.warn);
+          } else {
+            alert("Migration completed with unknown response.");
+          }
+        } else {
+          if (data.error) {
+            alert(`Error: ${data.error}`);
+          } else {
+            alert("Something went wrong.");
+          }
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+        alert("Failed to communicate with the server.");
+      }
+    });
+  document
+    .getElementById("eraseAndFillForm")
+    .addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const response = await fetch(this.action, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        alert("Database erased and filled successfully!");
+      } else {
+        alert("Something went wrong.");
+      }
+    });
+  const swiper = new Swiper(".swiper-container", {
+    slidesPerView: 4,
+    spaceBetween: 20,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    loop: true,
+    autoplay: {
+      delay: 3000,
+    },
+  });
+
+  async function filterVinyls() {
+    const query = document.getElementById("search-input").value.trim();
+    const resultsContainer = document.getElementById("search-results");
+    resultsContainer.innerHTML = "";
+
+    if (query === "") {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/search?q=${encodeURIComponent(query)}`);
+      if (response.ok) {
+        const data = await response.json();
+        const results = data.results;
+
+        if (results.length > 0) {
+          results.forEach((vinyl) => {
+            const resultItem = document.createElement("div");
+            resultItem.classList.add("search-result-item");
+            resultItem.innerHTML = `
+            <strong>${vinyl.vinyl_title}</strong> by ${vinyl.artist_name} <br>
+            <small>${vinyl.vinyl_genre}</small>
+          `;
+            resultItem.onclick = () => {
+              buyVinyl(vinyl.vinyl_id);
+            };
+            resultsContainer.appendChild(resultItem);
+          });
+        } else {
+          resultsContainer.innerHTML = `<div class="search-result-item">No results found</div>`;
+        }
+      } else {
+        resultsContainer.innerHTML = `<div class="search-result-item">Error fetching results</div>`;
+      }
+    } catch (error) {
+      resultsContainer.innerHTML = `<div class="search-result-item">Error: ${error.message}</div>`;
+    }
+  }
+
+  async function buyVinyl(vinylId) {
+    try {
+      const response = await fetch("/buy_vinyl", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ vinyl_id: vinylId }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(
+          `Vinyl with id ${vinylId} has been bough succesfully! check out your user Dashboard`,
+        );
+      } else if (data.warning) alert(data.warning);
+      else
+        alert(
+          `Something smells here. we werent able to handle your order ${vinylId}`,
+        );
+    } catch (error) {
+      console.error("Error purchasing vinyl:", error);
+      alert(`An error occurred while processing your purchase ID: ${vinylId}.`);
+    }
+  }
+  function login(action) {
+    const popup = document.getElementById("popupbox");
+    if (action === "show") {
+      popup.style.display = "block";
+    } else if (action === "hide") {
+      popup.style.display = "none";
+    }
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+  });
+
+  async function logout() {
+    const response = await fetch("/logout");
+    const data = await response.json();
+
+    if (data.warning) {
+      alert(data.warning);
+      return;
+    } else alert(data.success);
+  }
+
+  async function populateUserDropdown() {
+    try {
+      const response = await fetch("/get_users");
+      const data = await response.json();
+
+      if (data.error) {
+        console.error("Error fetching users:", data.error);
+        return;
+      }
+
+      const dropdown = document.getElementById("user-dropdown");
+      const { admins, customers } = data;
+
+      if (admins.length > 0) {
+        const adminGroup = document.createElement("optgroup");
+        adminGroup.label = "Admins";
+        admins.forEach((admin) => {
+          const option = document.createElement("option");
+          option.value = JSON.stringify({
+            email: admin.user_email,
+            password: admin.user_password,
+          });
+          option.textContent = `${admin.user_name} (Admin)`;
+          adminGroup.appendChild(option);
+        });
+        dropdown.appendChild(adminGroup);
+      }
+
+      if (customers.length > 0) {
+        const customerGroup = document.createElement("optgroup");
+        customerGroup.label = "Customers";
+        customers.forEach((customer) => {
+          const option = document.createElement("option");
+          option.value = JSON.stringify({
+            email: customer.user_email,
+            password: customer.user_password,
+          });
+          option.textContent = `${customer.user_name} (Customer)`;
+          customerGroup.appendChild(option);
+        });
+        dropdown.appendChild(customerGroup);
+      }
+    } catch (error) {
+      console.error("Error populating dropdown:", error);
+    }
+  }
+
+  async function loginSelectedUser() {
+    const dropdown = document.getElementById("user-dropdown");
+    const selectedValue = dropdown.value;
+
+    if (!selectedValue) {
+      alert("Please select a user.");
+      return;
+    }
+
+    const { email, password } = JSON.parse(selectedValue);
+
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+
+      const response = await fetch("/login", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        const result = await response.json();
+        alert(result.error || "Failed to log in.");
+      }
+    } catch (error) {
+      console.error("Error logging in user:", error);
+      alert("An error occurred while trying to log in.");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", populateUserDropdown);
+</script>

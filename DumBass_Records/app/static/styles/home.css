@@ -1,0 +1,239 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #fff;
+}
+#icyzp {
+  flex: 0 1 auto;
+}
+#irz7b {
+  justify-content: center;
+  padding-top: 11px;
+  padding-bottom: 7px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+#iycz3 {
+  max-width: 1200px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#iau9 {
+  font-family: Arial, Helvetica, sans-serif;
+  background-position: 0 0;
+  background-size: 100% 100%;
+  background-repeat: repeat;
+  background-attachment: scroll;
+  background-origin: padding-box;
+}
+.gjs-button {
+  vertical-align: top;
+  max-width: 100%;
+  display: inline-block;
+  text-decoration: none;
+  color: #333;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  background-color: #fff;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding-top: 10px;
+  font-size: 1.1rem;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.gjs-button:hover {
+  background-color: #2d4fdd;
+  color: #fff;
+}
+
+.gjs-link:hover {
+  color: #2d4fdd;
+  text-decoration: underline;
+}
+#infmy1 {
+  padding: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.gjs-image-box {
+  height: 200px;
+  width: 100%;
+}
+#icive2 {
+  padding: 10px;
+  min-width: 297px;
+  font-size: 30px;
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  padding-left: 8px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1);
+  margin-top: 0;
+  margin-right: 151px;
+  margin-bottom: 0;
+  margin-left: 0;
+}
+#i1mew {
+  border-top-left-radius: 60px;
+  border-top-right-radius: 60px;
+  border-bottom-right-radius: 60px;
+  border-bottom-left-radius: 60px;
+}
+.gjs-container {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+.gjs-section {
+  display: flex;
+  padding: 50px 0;
+}
+#ivjgs {
+  justify-content: center;
+  align-content: center;
+  flex-direction: row-reverse;
+}
+#ik4rf {
+  align-self: center;
+  flex: 0 0 auto;
+}
+@keyframes spin {
+  0% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+#ivjgs {
+  position: relative;
+  background-image: url("vinyl.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 500px;
+  margin-top: 80px;
+  animation: spin 50s linear infinite;
+  z-index: -1;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 992px) {
+  .gjs-grid-row {
+    flex-direction: column;
+  }
+  #iyd2 {
+    flex-direction: row;
+  }
+  #it00l {
+    flex-direction: row;
+  }
+}
+@media (max-width: 768px) {
+  #iffs {
+    display: none;
+  }
+}
+.best-selling-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.swiper-container {
+  overflow: hidden;
+}
+.swiper-wrapper {
+  display: flex;
+}
+.swiper-slide {
+  flex: 0 0 auto;
+  width: 250px;
+  margin-right: 15px;
+}
+.release-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  min-height: 570px;
+  text-align: center;
+  position: relative;
+}
+.release-actions {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+.release-actions a {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0;
+  border: 1px solid #333;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s;
+}
+.release-actions a:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.release-actions button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0;
+  border: 1px solid #333;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s;
+}
+.release-actions button:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.album-cover {
+  width: 100%;
+  height: 250px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+.release-info h3,
+.release-info h4,
+.release-info p {
+  margin: 5px 0;
+  color: #333;
+}

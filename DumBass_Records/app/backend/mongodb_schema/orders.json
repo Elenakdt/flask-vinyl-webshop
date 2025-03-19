@@ -1,0 +1,58 @@
+{
+  "$jsonSchema": {
+    "title": "Orders Collection",
+    "bsonType": "object",
+    "required": [
+      "_id",
+      "user_id",
+      "order_date",
+      "payment_method",
+      "total_price",
+      "vinyls"
+    ],
+    "properties": {
+      "_id": { "bsonType": "int" },
+      "user_id": { "bsonType": "int" },
+      "order_date": { "bsonType": "date" },
+      "payment_method": {
+        "bsonType": "string",
+        "enum": ["ApplePay", "Klarna", "Kreditkarte"]
+      },
+      "total_price": { "bsonType": "double", "minimum": 0 },
+      "vinyls": {
+        "bsonType": "array",
+        "items": {
+          "bsonType": "object",
+          "required": ["vinyl_id", "amount", "artist_details"],
+          "properties": {
+            "vinyl_id": { "bsonType": "int" },
+            "amount": { "bsonType": "int", "minimum": 1 },
+            "vinyl_details": {
+              "bsonType": "object",
+              "required": ["vinyl_title", "price", "cover_image", "genre"],
+              "properties": {
+                "vinyl_title": { "bsonType": "string" },
+                "price": { "bsonType": "double", "minimum": 0 },
+                "cover_image": { "bsonType": "string" },
+                "genre": { "bsonType": "string" }
+              },
+              "additionalProperties": false
+            },
+            "artist_details": {
+              "bsonType": "object",
+              "required": ["artist_id", "artist_name", "nationality"],
+              "properties": {
+                "artist_id": { "bsonType": "int" },
+                "artist_name": { "bsonType": "string" },
+                "nationality": { "bsonType": "string" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "additionalProperties": false
+  }
+}

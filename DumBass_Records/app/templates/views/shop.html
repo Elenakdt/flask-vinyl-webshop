@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vinyl Shop</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/header.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/shop.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=shopping_cart"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Roboto:wght@300&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="popupbox" style="display: none">
+      <form name="login" action="/login" method="post">
+        <center>Email:</center>
+        <center>
+          <input name="email" , type="email" size="14" />
+        </center>
+        <center>Password:</center>
+        <center>
+          <input name="password" type="password" size="14" />
+        </center>
+        <center>
+          <input type="submit" name="submit" value="Login" />
+        </center>
+      </form>
+      <br />
+      <center><a href="javascript:login('hide');">Close</a></center>
+    </div>
+    <div id="i6po" class="gjs-grid-row">
+      <div id="itjq" class="gjs-grid-column">
+        <div id="iyd2" class="gjs-grid-row">
+          <div id="iqjl" class="gjs-grid-column">
+            <div id="ik9gix" class="gjs-image-box">
+              <div id="icive2">DumBassRecords<br /></div>
+            </div>
+          </div>
+          <div class="search-container">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search..."
+              onkeyup="filterVinyls()"
+            />
+            <div class="search-results" id="search-results"></div>
+          </div>
+          <div id="iffs" class="gjs-grid-column">
+            <div id="it00l" class="gjs-grid-row">
+              <div id="irtfd" class="gjs-grid-column">
+                <a id="icfyb" href="javascript:login('show');" class="gjs-link"
+                  >Login</a
+                >
+              </div>
+            </div>
+          </div>
+          <div id="id8x" class="gjs-grid-column">
+            <form id="migrateToNoSql" action="/migrate_to_no_sql" method="POST">
+              <button id="i1mew" class="gjs-button" type="submit">
+                Migrate To No Sql
+              </button>
+            </form>
+          </div>
+          <div id="iffs" class="gjs-grid-column">
+            <div id="it00l" class="gjs-grid-row"></div>
+          </div>
+          <div id="id7x" class="gjs-grid-column">
+            <form
+              id="eraseAndFillForm"
+              action="/erase_and_fill_db"
+              method="POST"
+            >
+              <button id="i1mew" class="gjs-button" type="submit">
+                Erase &amp; Fill DataBass
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="pagination">
+        <span>1–50 of 17,988,502</span>
+        <a href="#prev" class="prev">&lt; Prev</a>
+        <a href="#next" class="next">Next &gt;</a>
+        <div class="sort-controls">
+          <span>Sort</span>
+          <select>
+            <option value="trending">Trending</option>
+            <option value="popular">Popular</option>
+            <option value="new">New Releases</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="vinyl-grid">
+        {% for vinyl in vinyls %}
+        <div class="card">
+          <img
+            src="{{ vinyl.cover_image }}"
+            alt="{{ vinyl.vinyl_title }} Cover"
+          />
+          <div class="card-content">
+            <h2>{{ vinyl.vinyl_title }}</h2>
+            <p><strong>Artist:</strong> {{ vinyl.artist_name }}</p>
+            <p><strong>Release Date:</strong> {{ vinyl.release_date }}</p>
+            <p><strong>Genre:</strong> {{ vinyl.vinyl_genre }}</p>
+            <p><strong>Price:</strong> ${{ "%.2f" | format(vinyl.price) }}</p>
+            <a href="/vinyl?id={{ vinyl.Vinyl_ID }}" class="button">
+              Buy Now
+              <span class="material-symbols-outlined">shopping_cart</span>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+  <script>
+    document
+      .getElementById("migrateToNoSql")
+      .addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        try {
+          const response = await fetch(this.action, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            if (data.success) {
+              alert(data.success);
+            } else if (data.warn) {
+              alert(data.warn);
+            } else {
+              alert("Migration completed with unknown response.");
+            }
+          } else {
+            if (data.error) {
+              alert(`Error: ${data.error}`);
+            } else {
+              alert("Something went wrong.");
+            }
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("Failed to communicate with the server.");
+        }
+      });
+    document
+      .getElementById("eraseAndFillForm")
+      .addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const response = await fetch(this.action, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          alert("Database erased and filled successfully!");
+        } else {
+          alert("Something went wrong.");
+        }
+      });
+    async function filterVinyls() {
+      const query = document.getElementById("search-input").value.trim();
+      const resultsContainer = document.getElementById("search-results");
+      resultsContainer.innerHTML = "";
+
+      if (query === "") {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/search?q=${encodeURIComponent(query)}`);
+        if (response.ok) {
+          const data = await response.json();
+          const results = data.results;
+
+          if (results.length > 0) {
+            results.forEach((vinyl) => {
+              const resultItem = document.createElement("div");
+              resultItem.classList.add("search-result-item");
+              resultItem.innerHTML = `
+            <strong>${vinyl.vinyl_title}</strong> by ${vinyl.artist_name} <br>
+            <small>${vinyl.vinyl_genre}</small>
+          `;
+              resultItem.onclick = () => {
+                alert(`Selected: ${vinyl.vinyl_title} by ${vinyl.artist_name}`);
+              };
+              resultsContainer.appendChild(resultItem);
+            });
+          } else {
+            resultsContainer.innerHTML = `<div class="search-result-item">No results found</div>`;
+          }
+        } else {
+          resultsContainer.innerHTML = `<div class="search-result-item">Error fetching results</div>`;
+        }
+      } catch (error) {
+        resultsContainer.innerHTML = `<div class="search-result-item">Error: ${error.message}</div>`;
+      }
+    }
+    function login(action) {
+      const popup = document.getElementById("popupbox");
+      if (action === "show") {
+        popup.style.display = "block";
+      } else if (action === "hide") {
+        popup.style.display = "none";
+      }
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+      }
+
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 0);
+    });
+  </script>
+</html>

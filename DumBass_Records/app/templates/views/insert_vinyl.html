@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Insert Vinyl</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/header.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/admin.css') }}"
+    />
+  </head>
+
+  <body id="insert-vinyl-page">
+    <div id="insert-vinyl-container">
+      <h1>Insert Vinyl</h1>
+      <div id="back-to-dashboard">
+        <a href="{{ url_for('admin_dashboard') }}" class="gjs-button">
+          Back to Dashboard
+        </a>
+      </div>
+      <form id="add-vinyl-form" method="POST" action="{{ url_for('add_vinyl') }}">
+        <div class="form-group">
+          <label for="artist_id">Artist ID:</label>
+          <input
+            type="text"
+            id="artist_id"
+            name="artist_id"
+            placeholder="Enter Artist ID"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="vinyl_name">Vinyl Name:</label>
+          <input
+            type="text"
+            id="vinyl_name"
+            name="vinyl_name"
+            placeholder="Enter Vinyl Name"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="vinyl_price">Price:</label>
+          <input
+            type="number"
+            id="vinyl_price"
+            name="vinyl_price"
+            placeholder="Enter Vinyl Price"
+            step="0.01"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="release_date">Release Date:</label>
+          <input
+            type="date"
+            id="release_date"
+            name="release_date"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="cover_image">Cover Image URL:</label>
+          <input
+            type="url"
+            id="cover_image"
+            name="cover_image"
+            placeholder="Enter Image URL"
+          />
+        </div>
+        <div class="form-group">
+          <label for="genre">Genre:</label>
+          <input
+            type="text"
+            id="genre"
+            name="genre"
+            placeholder="Enter Genre"
+            required
+          />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="gjs-button">Add Vinyl</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

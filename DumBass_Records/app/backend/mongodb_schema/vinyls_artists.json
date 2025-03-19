@@ -1,0 +1,54 @@
+{
+  "$jsonSchema": {
+    "title": "Vinyls with embedded artists",
+    "bsonType": "object",
+    "required": ["artist", "vinyl_title", "price", "release_date", "genre"],
+    "properties": {
+      "_id": {
+        "bsonType": "int",
+        "description": "unique id for vinyl"
+      },
+      "artist": {
+        "bsonType": "object",
+        "required": ["artist_name", "nationality"],
+        "properties": {
+          "_id": {
+            "bsonType": "int",
+            "description": "id of artist"
+          },
+          "artist_name": {
+            "bsonType": "string",
+            "description": "name of the artist, required"
+          },
+          "nationality": {
+            "bsonType": "string",
+            "description": "nationality of the artist, required"
+          }
+        },
+        "description": "artist embedded in vinyl, required"
+      },
+      "vinyl_title": {
+        "bsonType": "string",
+        "description": "title of the vinyl, required"
+      },
+      "price": {
+        "bsonType": "double",
+        "minimum": 0.0,
+        "description": "price of the vinyl, minimum 0.00"
+      },
+      "release_date": {
+        "bsonType": "date",
+        "description": "release date of the vinyl, required"
+      },
+      "cover_image": {
+        "bsonType": "string",
+        "description": "cover image of the vinyl, required"
+      },
+      "genre": {
+        "bsonType": "string",
+        "description": "genre of the vinyl, required"
+      }
+    },
+    "additionalProperties": false
+  }
+}

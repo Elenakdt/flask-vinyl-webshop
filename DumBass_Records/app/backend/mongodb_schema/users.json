@@ -1,0 +1,57 @@
+{
+  "$jsonSchema": {
+    "title": "Users Collection",
+    "bsonType": "object",
+    "required": ["_id", "user_name", "user_email", "user_password", "role"],
+    "properties": {
+      "_id": {
+        "bsonType": "int",
+        "description": "unique identifier for the user"
+      },
+      "user_name": {
+        "bsonType": "string",
+        "description": "name of the user, required"
+      },
+      "user_email": {
+        "bsonType": "string",
+        "pattern": "^.+@.+..+$",
+        "description": "email address of the user, required"
+      },
+      "user_password": {
+        "bsonType": "string",
+        "description": "password for user authentication, required"
+      },
+      "role": {
+        "bsonType": "string",
+        "enum": ["admin", "customer"],
+        "description": "role of the user, required and must be either admin or customer"
+      },
+      "admin_details": {
+        "bsonType": "object",
+        "required": ["department"],
+        "properties": {
+          "department": {
+            "bsonType": "string",
+            "enum": ["IT", "HR", "Finance"],
+            "description": "department of the admin, required"
+          }
+        },
+        "description": "additional details for admin users",
+        "additionalProperties": false
+      },
+      "customer_details": {
+        "bsonType": "object",
+        "required": ["address"],
+        "properties": {
+          "address": {
+            "bsonType": "string",
+            "description": "address of the customer, required"
+          }
+        },
+        "description": "additional details for customer users",
+        "additionalProperties": false
+      }
+    },
+    "additionalProperties": false
+  }
+}
